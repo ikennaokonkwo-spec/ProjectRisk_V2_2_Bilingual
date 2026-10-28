@@ -1,0 +1,15 @@
+test_all_controlled_values (__main__.BilingualTests.test_all_controlled_values) ... ok
+test_boolean_inactive_validation (__main__.BilingualTests.test_boolean_inactive_validation) ... ok
+test_display_does_not_mutate (__main__.BilingualTests.test_display_does_not_mutate) ... ok
+test_exports_keep_original_bytes (__main__.BilingualTests.test_exports_keep_original_bytes) ... ok
+test_headers_and_collisions (__main__.BilingualTests.test_headers_and_collisions) ... ok
+test_locale_numbers (__main__.BilingualTests.test_locale_numbers) ... ok
+test_model_equivalence (__main__.BilingualTests.test_model_equivalence) ... ok
+test_seeded_language_equivalence (__main__.BilingualTests.test_seeded_language_equivalence) ... ok
+test_template_native_preservation (__main__.BilingualTests.test_template_native_preservation) ... ok
+test_validation_translation (__main__.BilingualTests.test_validation_translation) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 1.251s
+
+OK

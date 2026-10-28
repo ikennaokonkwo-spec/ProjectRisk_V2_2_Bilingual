@@ -1,0 +1,10 @@
+Unified V2.2 integration verification
+All existing core, treatment and integration scripts passed.
+Five management/cost tests passed; three cost-model integration tests passed.
+Populated-case, live-formula-cache and Streamlit upload/simulate/portrait/treatment workflow checks passed.
+Live formula change checks passed for budget, share, reference duration, fixed-only selection and zero share.
+Fixed-only duration changes leave price unchanged; separately mapped direct costs remain effective.
+Saved formula reconciliation detects stale budget/share/duration inputs and uses Activity_ID matching.
+Desktop Excel was not exercised. Recalculate and save workbook edits before uploading.
+
+Header-detection fix: attached reformatted workbook reads and validates (30 activities, 24 risks, zero issues). Original and mixed-position header regression checks pass. All application tests pass with the reformatted workbook. The embedded workbook is byte-identical to the user attachment.
