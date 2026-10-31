@@ -30,8 +30,9 @@ def main():
         with zipfile.ZipFile(ROOT/'baseline/ProjectRisk_V2_2_original.zip') as z:z.extractall(work/'baseline')
         baseline=work/'baseline/ProjectRisk_V2_2'
         original_core={str(f.relative_to(baseline)):hashlib.sha256(f.read_bytes()).hexdigest() for f in (baseline/'core').glob('*.py')}
-        for name,digest in original_core.items():assert hashlib.sha256((ROOT/name).read_bytes()).hexdigest()==digest,('Core changed',name)
-        for name in ['data_io/export_results.py','data_io/model_adapter.py','project_risk_template_v2_2.xlsx']:
+        unchanged_core={name:digest for name,digest in original_core.items() if name not in {'core/distributions.py','core/validation.py'}}
+        for name,digest in unchanged_core.items():assert hashlib.sha256((ROOT/name).read_bytes()).hexdigest()==digest,('Core changed',name)
+        for name in ['data_io/export_results.py']:
             assert (baseline/name).read_bytes()==(ROOT/name).read_bytes(),name
         results=[]
         for i,(module,book) in enumerate([(baseline,baseline/'project_risk_template_v2_2.xlsx'),(ROOT,ROOT/'project_risk_template_v2_2.xlsx'),(ROOT,ROOT/'project_risk_template_v2_2_pt_BR.xlsx')]):
@@ -40,7 +41,7 @@ def main():
             # Loading only our own just-generated local verification outputs.
             with open(output,'rb') as f:results.append(pickle.load(f))
         compare(results[0],results[1]);compare(results[0],results[2])
-        summary={'result':'PASS','iterations_per_main_run':args.iterations,'seed':args.seed,'engines_compared':['original V2.2','bilingual English workbook','bilingual Portuguese workbook'],'main_iteration_frames':'exact equality for every project, activity and risk cell','portrait':'all cumulative scenarios at 100 iterations; exact equality of every scenario iteration frame and summary','treatments':'single and multiple risk scenarios at 100 iterations; exact equality','unchanged_core_files':original_core,'canonical_exporter_model_adapter_english_workbook':'byte-identical to supplied V2.2','translated_narrative_fields':'excluded from numerical comparison; source text is preserved in the original workbook and archive'}
+        summary={'result':'PASS','iterations_per_main_run':args.iterations,'seed':args.seed,'engines_compared':['original V2.2','bilingual English workbook','bilingual Portuguese workbook'],'main_iteration_frames':'exact equality for every project, activity and risk cell','portrait':'all cumulative scenarios at 100 iterations; exact equality of every scenario iteration frame and summary','treatments':'single and multiple risk scenarios at 100 iterations; exact equality','unchanged_core_files':unchanged_core,'intentionally_extended_files':['core/distributions.py','core/validation.py','data_io/model_adapter.py','localization/schema.py','both workbook templates','interface guide and documentation'],'canonical_exporter':'byte-identical to supplied V2.2','translated_narrative_fields':'excluded from numerical comparison; source text is preserved in the original workbook and archive'}
         (ROOT/'verification/NUMERICAL_EQUIVALENCE.json').write_text(json.dumps(summary,indent=2)+'\n',encoding='utf-8')
-        print('PASS: original, English and Portuguese results are exactly equal. Core files are byte-identical.',flush=True)
+        print('PASS: original, English and Portuguese results are exactly equal. Unextended core modules are byte-identical.',flush=True)
 if __name__=='__main__':main()

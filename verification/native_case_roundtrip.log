@@ -1,0 +1,5 @@
+convert /workspace/scratch/bfd5fe263136/build/ProjectRisk_Corrected_AOA_AON/examples/irrigation_case_en.xlsx as a Calc document -> /workspace/scratch/bfd5fe263136/outputs/corrected_irrigation/native_case_roundtrip/irrigation_case_en.xlsx using filter : Calc Office Open XML
+ 
+convert /workspace/scratch/bfd5fe263136/build/ProjectRisk_Corrected_AOA_AON/examples/irrigation_case_pt_BR.xlsx as a Calc document -> /workspace/scratch/bfd5fe263136/outputs/corrected_irrigation/native_case_roundtrip/irrigation_case_pt_BR.xlsx using filter : Calc Office Open XML
+ 
+PASS: both cases preserve validation, all model objects, text IDs and exact simulation results after native open/save.

@@ -1,3 +1,5 @@
+Distribution-extension notice: see DISTRIBUTION_GUIDE_EN_PT_BR.md and verification/VERIFICATION_REPORT.md for current options and verification. Byte-identity claims in the historical notes below refer to the previous bilingual release, not the intentionally extended files in this release.
+
 # Project Risk Analysis V2.2
 
 Run `python -m pip install -r requirements.txt`, then `python -m streamlit run app2_2.py` from this folder. The launch scripts now reference this entry point. Run `python run_tests.py` for calculation, integration and Streamlit workflow checks.

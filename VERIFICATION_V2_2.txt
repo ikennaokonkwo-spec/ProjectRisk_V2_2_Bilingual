@@ -1,3 +1,5 @@
+Distribution-extension notice: see DISTRIBUTION_GUIDE_EN_PT_BR.md and verification/VERIFICATION_REPORT.md for current options and verification. Byte-identity claims in the historical notes below refer to the previous bilingual release, not the intentionally extended files in this release.
+
 Unified V2.2 integration verification
 All existing core, treatment and integration scripts passed.
 Five management/cost tests passed; three cost-model integration tests passed.

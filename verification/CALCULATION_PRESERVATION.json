@@ -1,0 +1,21 @@
+{
+  "result": "PASS",
+  "reference": "previous distribution release",
+  "all_core_and_data_io_modules_byte_identical": {
+    "core/simulation.py": "0a5812f811390d0b6f019b09ef819949b21ac4ed290e7fdfd3d184d0784c6c71",
+    "core/register.py": "b622df0f5da9434c21fba2086c4256a39cd64ed9e7257d633387aa4553311bbf",
+    "core/validation.py": "a387b4a6e9f351e931672c27e501d3426c43c15154a24714a1fd1d0a04ed65a8",
+    "core/reference_analysis.py": "80ba8b98fa6a85d96af8c0d854f20a833f3b73aae8fe989707117e7aa091d9b8",
+    "core/network.py": "521123748724cb3dc060343be58f1d52c21772810203877e795a25fb6451440b",
+    "core/risk_portrait.py": "2f37843804407fea19703a478f04b540037efb3a9714bc6b49ed88dea8f8b27b",
+    "core/distributions.py": "884ca92372f3cbb9a0dc4b9fae4a732ccfc1fa9d72839a44589326d32079ff77",
+    "core/cost_model.py": "06e4949eb63dced5e344ce44865ee353601ce7e31f5a06a577d773a66a081ffd",
+    "core/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "core/risk_analysis.py": "3c10fa3ef44541bcaa4efe409a1cb651c7cadbb6c4655f2d735b3e7a17499267",
+    "core/treatment.py": "17160fc264e665a1426f4945a273e6bf0558413ce072263c935bca8b08d8a1e8",
+    "data_io/model_adapter.py": "abd1d39ab1db410bfd0d8c06e561a0993610e3d1082224c90e513e65d8c0cbc3",
+    "data_io/input_reader.py": "e7796d749abf96bca3286e6abe29a0710105998f80b078a3a40fdd151611e12f",
+    "data_io/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "data_io/export_results.py": "1efd72af79ea0b6e94e9df7a718250e8bb938a6f93f1216aab2958ca382020ae"
+  }
+}

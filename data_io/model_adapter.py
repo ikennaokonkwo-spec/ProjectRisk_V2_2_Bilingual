@@ -16,6 +16,11 @@ def _params(row,prefix,model):
         return {"min":_num(row.get(f"{prefix}_Min")),"most_likely":_num(row.get(f"{prefix}_MostLikely")),"max":_num(row.get(f"{prefix}_Max"))}
     if model=="Uniform": return {"min":_num(row.get(f"{prefix}_Min")),"max":_num(row.get(f"{prefix}_Max"))}
     if model=="Normal": return {"mean":_num(row.get(f"{prefix}_Mean")),"sd":_num(row.get(f"{prefix}_SD"))}
+    if model in {"Exponential", "Lognormal", "Gamma"}:
+        from core.distributions import positive_moments
+        params={"mean":_num(row.get(f"{prefix}_Mean"))}
+        if model!="Exponential": params["sd"]=_num(row.get(f"{prefix}_SD"))
+        return positive_moments(model,params)
     raise ValueError(model)
 
 def to_model_objects(data):

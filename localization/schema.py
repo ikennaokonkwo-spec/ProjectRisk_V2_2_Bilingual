@@ -12,6 +12,9 @@ def token(value):
 
 _HEADERS={token(v):k for k,v in FIELDS.items() if k not in SHEETS and k[0].isupper()}
 _HEADERS.update({token(k):k for k in FIELDS if k not in SHEETS and k[0].isupper()})
+# Input aliases take precedence over similarly named diagnostic output columns.
+# In Portuguese, Cost_Min and Min_Cost otherwise both map to Custo_Minimo.
+_HEADERS.update({token(FIELDS[k]):k for k in ('Cost_Model','Cost_Fixed','Cost_Min','Cost_MostLikely','Cost_Max','Cost_Mean','Cost_SD')})
 
 def canonical_header(value):
     return _HEADERS.get(token(value),str(value).replace('\ufeff','').strip()) if not pd.isna(value) else ''
@@ -28,10 +31,10 @@ def resolve_sheets(names):
     return out
 
 CONTROLLED={
- 'Duration_Model':{'Fixed','Triangular','Beta-PERT','Normal','Uniform'},
- 'Cost_Model':{'Fixed','Triangular','Beta-PERT','Normal','Uniform'},
- 'Distribution':{'Fixed','Triangular','Beta-PERT','Normal','Uniform'},
- 'Impact_Distribution_Default':{'Fixed','Triangular','Beta-PERT','Normal','Uniform'},
+ 'Duration_Model':{'Fixed','Triangular','Beta-PERT','Normal','Uniform','Exponential','Lognormal','Gamma'},
+ 'Cost_Model':{'Fixed','Triangular','Beta-PERT','Normal','Uniform','Exponential','Lognormal','Gamma'},
+ 'Distribution':{'Fixed','Triangular','Beta-PERT','Normal','Uniform','Exponential','Lognormal','Gamma'},
+ 'Impact_Distribution_Default':{'Fixed','Triangular','Beta-PERT','Normal','Uniform','Exponential','Lognormal','Gamma'},
  'Probability_Model':{'Fixed','Uniform'},'Risk_Type':{'Threat','Opportunity'},
  'Scope':{'Local','Global'},'Impact_Type':{'Duration','Cost','Both'},
  'Impact_Mode':{'Absolute','Relative'},'Cost_Association':{'Fixed only','Fixed + time'},
@@ -62,7 +65,7 @@ def normalize_table(df,sheet,pt=False):
             if row['Field'] in {'Simulation_Iterations','Random_Seed','Target_Duration','Target_Cost'}:
                 out.at[i,'Value']=numeric(row['Value'],pt)
             elif row['Field']=='Time_Unit':
-                choices=['days','project time units']
+                choices=['days','weeks','months','years','project time units']
                 rev={token(PT.get(v,v)):v for v in choices}
                 out.at[i,'Value']=rev.get(token(row['Value']),row['Value'])
         return out

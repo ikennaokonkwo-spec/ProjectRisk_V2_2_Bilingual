@@ -1,0 +1,15 @@
+en_cost.xlsx convert /workspace/scratch/bfd5fe263136/outputs/corrected_irrigation/native_qa/en_cost.xlsx as a Calc document -> /workspace/scratch/bfd5fe263136/outputs/corrected_irrigation/native_qa/en_cost.pdf using filter : calc_pdf_Export
+Overwriting: /workspace/scratch/bfd5fe263136/outputs/corrected_irrigation/native_qa/en_cost.pdf
+ 
+en_duration.xlsx convert /workspace/scratch/bfd5fe263136/outputs/corrected_irrigation/native_qa/en_duration.xlsx as a Calc document -> /workspace/scratch/bfd5fe263136/outputs/corrected_irrigation/native_qa/en_duration.pdf using filter : calc_pdf_Export
+Overwriting: /workspace/scratch/bfd5fe263136/outputs/corrected_irrigation/native_qa/en_duration.pdf
+ 
+en_impact.xlsx convert /workspace/scratch/bfd5fe263136/outputs/corrected_irrigation/native_qa/en_impact.xlsx as a Calc document -> /workspace/scratch/bfd5fe263136/outputs/corrected_irrigation/native_qa/en_impact.pdf using filter : calc_pdf_Export
+ 
+pt_BR_cost.xlsx convert /workspace/scratch/bfd5fe263136/outputs/corrected_irrigation/native_qa/pt_BR_cost.xlsx as a Calc document -> /workspace/scratch/bfd5fe263136/outputs/corrected_irrigation/native_qa/pt_BR_cost.pdf using filter : calc_pdf_Export
+ 
+pt_BR_duration.xlsx convert /workspace/scratch/bfd5fe263136/outputs/corrected_irrigation/native_qa/pt_BR_duration.xlsx as a Calc document -> /workspace/scratch/bfd5fe263136/outputs/corrected_irrigation/native_qa/pt_BR_duration.pdf using filter : calc_pdf_Export
+ 
+pt_BR_impact.xlsx convert /workspace/scratch/bfd5fe263136/outputs/corrected_irrigation/native_qa/pt_BR_impact.xlsx as a Calc document -> /workspace/scratch/bfd5fe263136/outputs/corrected_irrigation/native_qa/pt_BR_impact.pdf using filter : calc_pdf_Export
+ 
+PDFs: ['en_impact.pdf', 'pt_BR_duration.pdf', 'pt_BR_impact.pdf', 'en_duration.pdf', 'en_cost.pdf', 'pt_BR_cost.pdf']

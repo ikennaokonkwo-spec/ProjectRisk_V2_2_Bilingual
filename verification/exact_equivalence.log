@@ -1,4 +1,4 @@
 project_risk_template_v2_2.xlsx: 5000 iterations + complete 100-iteration portrait + single/multiple treatments
 project_risk_template_v2_2.xlsx: 5000 iterations + complete 100-iteration portrait + single/multiple treatments
 project_risk_template_v2_2_pt_BR.xlsx: 5000 iterations + complete 100-iteration portrait + single/multiple treatments
-PASS: original, English and Portuguese results are exactly equal. Core files are byte-identical.
+PASS: original, English and Portuguese results are exactly equal. Unextended core modules are byte-identical.

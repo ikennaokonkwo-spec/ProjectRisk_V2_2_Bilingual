@@ -1,0 +1,413 @@
+{
+  "activities": [
+    {
+      "id": "2.1",
+      "name_en": "Project Planning",
+      "name_pt": "Planejamento do Projeto",
+      "model": "Normal",
+      "parameters": [
+        null,
+        null,
+        null,
+        null,
+        2,
+        0.5
+      ],
+      "predecessors": []
+    },
+    {
+      "id": "2.2",
+      "name_en": "Pipe Design",
+      "name_pt": "Projeto das Tubulações",
+      "model": "Triangular",
+      "parameters": [
+        null,
+        2,
+        3,
+        4,
+        null,
+        null
+      ],
+      "predecessors": [
+        "2.1"
+      ]
+    },
+    {
+      "id": "2.3",
+      "name_en": "Material Acquisition",
+      "name_pt": "Aquisição de Materiais",
+      "model": "Exponential",
+      "parameters": [
+        null,
+        null,
+        null,
+        null,
+        1,
+        null
+      ],
+      "predecessors": [
+        "2.2"
+      ]
+    },
+    {
+      "id": "2.4",
+      "name_en": "Material Review",
+      "name_pt": "Revisão dos Materiais",
+      "model": "Triangular",
+      "parameters": [
+        null,
+        1,
+        2,
+        3,
+        null,
+        null
+      ],
+      "predecessors": [
+        "2.3"
+      ]
+    },
+    {
+      "id": "2.5",
+      "name_en": "Excavation for Pipes",
+      "name_pt": "Escavação para Tubulações",
+      "model": "Normal",
+      "parameters": [
+        null,
+        null,
+        null,
+        null,
+        4,
+        1
+      ],
+      "predecessors": [
+        "2.2"
+      ]
+    },
+    {
+      "id": "2.6",
+      "name_en": "Pipe Installation",
+      "name_pt": "Instalação das Tubulações",
+      "model": "Beta-PERT",
+      "parameters": [
+        null,
+        4,
+        5,
+        7,
+        null,
+        null
+      ],
+      "predecessors": [
+        "2.4",
+        "2.5"
+      ]
+    },
+    {
+      "id": "2.7",
+      "name_en": "Pipe Pressure Testing",
+      "name_pt": "Teste de Pressão das Tubulações",
+      "model": "Normal",
+      "parameters": [
+        null,
+        null,
+        null,
+        null,
+        2,
+        0.5
+      ],
+      "predecessors": [
+        "2.6"
+      ]
+    },
+    {
+      "id": "2.8",
+      "name_en": "Quality Inspection",
+      "name_pt": "Inspeção de Qualidade",
+      "model": "Exponential",
+      "parameters": [
+        null,
+        null,
+        null,
+        null,
+        1,
+        null
+      ],
+      "predecessors": [
+        "2.7"
+      ]
+    },
+    {
+      "id": "2.9",
+      "name_en": "Distribution System Connections",
+      "name_pt": "Conexões aos Sistemas de Distribuição",
+      "model": "Triangular",
+      "parameters": [
+        null,
+        2,
+        3,
+        5,
+        null,
+        null
+      ],
+      "predecessors": [
+        "2.8"
+      ]
+    },
+    {
+      "id": "2.10",
+      "name_en": "Operator Training",
+      "name_pt": "Treinamento dos Operadores",
+      "model": "Normal",
+      "parameters": [
+        null,
+        null,
+        null,
+        null,
+        1,
+        0.1
+      ],
+      "predecessors": [
+        "2.8"
+      ]
+    },
+    {
+      "id": "2.11",
+      "name_en": "Initial Monitoring and Maintenance",
+      "name_pt": "Monitoramento e Manutenção Inicial",
+      "model": "Exponential",
+      "parameters": [
+        null,
+        null,
+        null,
+        null,
+        2,
+        null
+      ],
+      "predecessors": [
+        "2.9",
+        "2.10"
+      ]
+    },
+    {
+      "id": "2.12",
+      "name_en": "Project Documentation",
+      "name_pt": "Documentação do Projeto",
+      "model": "Beta-PERT",
+      "parameters": [
+        null,
+        0.5,
+        1,
+        1.5,
+        null,
+        null
+      ],
+      "predecessors": [
+        "2.11"
+      ]
+    },
+    {
+      "id": "2.13",
+      "name_en": "System Commissioning",
+      "name_pt": "Comissionamento do Sistema",
+      "model": "Normal",
+      "parameters": [
+        null,
+        null,
+        null,
+        null,
+        1,
+        0.3
+      ],
+      "predecessors": [
+        "2.12"
+      ]
+    },
+    {
+      "id": "2.14",
+      "name_en": "Final Project Report",
+      "name_pt": "Relatório Final do Projeto",
+      "model": "Exponential",
+      "parameters": [
+        null,
+        null,
+        null,
+        null,
+        1,
+        null
+      ],
+      "predecessors": [
+        "2.13"
+      ]
+    },
+    {
+      "id": "2.15",
+      "name_en": "Final Risk Analysis",
+      "name_pt": "Análise Final de Riscos",
+      "model": "Normal",
+      "parameters": [
+        null,
+        null,
+        null,
+        null,
+        1,
+        0.2
+      ],
+      "predecessors": [
+        "2.14"
+      ]
+    }
+  ],
+  "risks": [
+    {
+      "id": "R1",
+      "name_en": "Material delivery delays",
+      "name_pt": "Atrasos na entrega de materiais",
+      "probability": 0.3,
+      "model": "Triangular",
+      "parameters": [
+        null,
+        1,
+        2,
+        4,
+        null,
+        null
+      ],
+      "affected": [
+        "2.3",
+        "2.6"
+      ]
+    },
+    {
+      "id": "R2",
+      "name_en": "Pipe design errors",
+      "name_pt": "Erros no projeto das tubulações",
+      "probability": 0.3,
+      "model": "Triangular",
+      "parameters": [
+        null,
+        1,
+        3,
+        5,
+        null,
+        null
+      ],
+      "affected": [
+        "2.2",
+        "2.5"
+      ]
+    },
+    {
+      "id": "R3",
+      "name_en": "Adverse weather during excavation",
+      "name_pt": "Condições climáticas adversas durante a escavação",
+      "probability": 0.2,
+      "model": "Normal",
+      "parameters": [
+        null,
+        null,
+        null,
+        null,
+        1.5,
+        1
+      ],
+      "affected": [
+        "2.5",
+        "2.6"
+      ]
+    },
+    {
+      "id": "R4",
+      "name_en": "Pressure-test quality problems",
+      "name_pt": "Problemas de qualidade no teste de pressão",
+      "probability": 0.4,
+      "model": "Exponential",
+      "parameters": [
+        null,
+        null,
+        null,
+        null,
+        2,
+        null
+      ],
+      "affected": [
+        "2.7",
+        "2.8"
+      ]
+    },
+    {
+      "id": "R5",
+      "name_en": "Communication failures during training",
+      "name_pt": "Falhas de comunicação durante o treinamento",
+      "probability": 0.2,
+      "model": "Triangular",
+      "parameters": [
+        null,
+        0.5,
+        1,
+        2,
+        null,
+        null
+      ],
+      "affected": [
+        "2.10",
+        "2.13"
+      ]
+    },
+    {
+      "id": "R6",
+      "name_en": "Failed quality inspection",
+      "name_pt": "Inspeção de qualidade não aprovada",
+      "probability": 0.1,
+      "model": "Triangular",
+      "parameters": [
+        null,
+        0.5,
+        2,
+        2.5,
+        null,
+        null
+      ],
+      "affected": [
+        "2.8",
+        "2.9"
+      ]
+    },
+    {
+      "id": "R7",
+      "name_en": "Lack of qualified installation personnel",
+      "name_pt": "Falta de pessoal qualificado para instalação",
+      "probability": 0.3,
+      "model": "Exponential",
+      "parameters": [
+        null,
+        null,
+        null,
+        null,
+        3,
+        null
+      ],
+      "affected": [
+        "2.6",
+        "2.10"
+      ]
+    },
+    {
+      "id": "R8",
+      "name_en": "Material review not completed on time",
+      "name_pt": "Revisão de materiais não concluída no prazo",
+      "probability": 0.2,
+      "model": "Triangular",
+      "parameters": [
+        null,
+        1,
+        1.5,
+        3,
+        null,
+        null
+      ],
+      "affected": [
+        "2.4",
+        "2.12"
+      ]
+    }
+  ]
+}

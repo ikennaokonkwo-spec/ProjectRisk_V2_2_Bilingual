@@ -1,0 +1,12 @@
+test_aoa_preserves_precedence_and_all_cpm_fields (__main__.RepairTests.test_aoa_preserves_precedence_and_all_cpm_fields) ... ok
+test_display_conversion_does_not_mutate_inputs (__main__.RepairTests.test_display_conversion_does_not_mutate_inputs) ... ok
+test_irrigation_bilingual_results_and_cpm (__main__.RepairTests.test_irrigation_bilingual_results_and_cpm) ... ok
+test_numeric_identifiers_and_svg_are_safe (__main__.RepairTests.test_numeric_identifiers_and_svg_are_safe) ... ok
+test_old_defect_is_rejected_and_original_styles_restored (__main__.RepairTests.test_old_defect_is_rejected_and_original_styles_restored) ... ok
+test_parameter_highlights_keep_original_colors (__main__.RepairTests.test_parameter_highlights_keep_original_colors) ... ok
+test_source_values_and_all_user_decisions (__main__.RepairTests.test_source_values_and_all_user_decisions) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 5.213s
+
+OK

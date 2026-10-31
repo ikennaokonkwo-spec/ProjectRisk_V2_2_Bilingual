@@ -11,18 +11,24 @@
   "portrait": "all cumulative scenarios at 100 iterations; exact equality of every scenario iteration frame and summary",
   "treatments": "single and multiple risk scenarios at 100 iterations; exact equality",
   "unchanged_core_files": {
-    "core/treatment.py": "17160fc264e665a1426f4945a273e6bf0558413ce072263c935bca8b08d8a1e8",
-    "core/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "core/simulation.py": "0a5812f811390d0b6f019b09ef819949b21ac4ed290e7fdfd3d184d0784c6c71",
     "core/register.py": "b622df0f5da9434c21fba2086c4256a39cd64ed9e7257d633387aa4553311bbf",
     "core/reference_analysis.py": "80ba8b98fa6a85d96af8c0d854f20a833f3b73aae8fe989707117e7aa091d9b8",
-    "core/validation.py": "cdca74e59a66f4865a45821c110fe97929dd6938e481c3b19da7d68ac614b67c",
-    "core/risk_portrait.py": "2f37843804407fea19703a478f04b540037efb3a9714bc6b49ed88dea8f8b27b",
-    "core/distributions.py": "35c5d02175573d6674b85b801f3059373b8ff120ba92bf10e3a10cc50533e74b",
-    "core/cost_model.py": "06e4949eb63dced5e344ce44865ee353601ce7e31f5a06a577d773a66a081ffd",
     "core/network.py": "521123748724cb3dc060343be58f1d52c21772810203877e795a25fb6451440b",
-    "core/simulation.py": "0a5812f811390d0b6f019b09ef819949b21ac4ed290e7fdfd3d184d0784c6c71",
-    "core/risk_analysis.py": "3c10fa3ef44541bcaa4efe409a1cb651c7cadbb6c4655f2d735b3e7a17499267"
+    "core/risk_portrait.py": "2f37843804407fea19703a478f04b540037efb3a9714bc6b49ed88dea8f8b27b",
+    "core/cost_model.py": "06e4949eb63dced5e344ce44865ee353601ce7e31f5a06a577d773a66a081ffd",
+    "core/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "core/risk_analysis.py": "3c10fa3ef44541bcaa4efe409a1cb651c7cadbb6c4655f2d735b3e7a17499267",
+    "core/treatment.py": "17160fc264e665a1426f4945a273e6bf0558413ce072263c935bca8b08d8a1e8"
   },
-  "canonical_exporter_model_adapter_english_workbook": "byte-identical to supplied V2.2",
+  "intentionally_extended_files": [
+    "core/distributions.py",
+    "core/validation.py",
+    "data_io/model_adapter.py",
+    "localization/schema.py",
+    "both workbook templates",
+    "interface guide and documentation"
+  ],
+  "canonical_exporter": "byte-identical to supplied V2.2",
   "translated_narrative_fields": "excluded from numerical comparison; source text is preserved in the original workbook and archive"
 }

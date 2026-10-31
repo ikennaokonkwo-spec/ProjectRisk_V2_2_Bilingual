@@ -126,9 +126,10 @@ def network_view(svg):
     # Restrict substitutions to SVG text nodes. Coordinates and path geometry stay untouched.
     def replace(m):
         s=m.group(1)
+        numeric_line=s.startswith(('Dur ','ES ','EF ','LS ','LF ','Slack ','Folga '))
         for a,b in [('Slack ','Folga '),('Dur ','Dur '),('ES ','IC '),('EF ','TC '),('LS ','IT '),('LF ','TT ')]:
             s=s.replace(a,b)
-        s=re.sub(r'(?<=\d)\.(?=\d)',',',s)
+        if numeric_line: s=re.sub(r'(?<=\d)\.(?=\d)',',',s)
         return '>'+s+'</text>'
     return re.sub(r'>([^<>]*)</text>',replace,svg)
 

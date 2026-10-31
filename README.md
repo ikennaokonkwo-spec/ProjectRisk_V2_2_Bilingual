@@ -1,62 +1,74 @@
-# English / Português (Brasil)
+# State-preserving language switching
 
-This bilingual extension preserves the V2.2 computational engine. Select **Language / Idioma** in the sidebar. Either workbook language can be uploaded in either interface language. Switching languages preserves the simulation, Risk Portrait and treatment results.
+English/Portuguese switching now preserves the active session before, during and after simulation, Risk Portrait and treatment calculations. Hidden treatment edits, upload data, simulation settings, diagram choices and completed outputs are retained. See [SESSION_STATE_EN_PT_BR.md](SESSION_STATE_EN_PT_BR.md) for behavior and session boundaries.
 
-Esta extensão bilíngue preserva o mecanismo computacional V2.2. Selecione **Language / Idioma** na barra lateral. As duas versões da pasta de trabalho podem ser usadas em qualquer idioma da interface. A troca de idioma preserva a simulação, o retrato de riscos e os resultados de tratamento. Consulte **LEIA_ME_PT_BR.md** e **NOTAS_DE_IMPLEMENTACAO_PT_BR.md**.
+All workbook files and all `core/` and `data_io/` Python modules remain byte-identical to the preceding corrected release. The original colors, distribution highlights, general templates and separate irrigation inputs remain included.
 
-## Start / Iniciar
+# Corrected highlighting, irrigation inputs and AOA/AON display
 
-Use Python 3.12 for the verified environment. From this folder:
+This release repairs the Excel conditional-formatting XML and overlapping optional-cost column definitions. It reuses the original workbook's differential styles and colour identification. Automatic recalculation is explicit. All eight distribution choices remain available.
+
+Two additional, validated case inputs are included:
+
+- `examples/irrigation_case_en.xlsx`
+- `examples/irrigation_case_pt_BR.xlsx`
+
+They contain 15 activities, 8 risks and 16 mappings, including the three source interpretations explicitly confirmed by the user. The general templates remain separate and retain their construction demonstration data. See `examples/IRRIGATION_README_EN_PT_BR.md` for source provenance, decisions and scope. Source correlations are documented but not simulated; no cost estimates were invented.
+
+The app now offers **Network diagram: AON / AOA**. AON remains the default. AOA is a display-only conversion; zero-duration dummy links preserve joins without adding simulated activities or costs. See `NETWORK_DISPLAY_EN_PT_BR.md`.
+
+A correção restaura os estilos e as cores originais e regulariza a estrutura XML e as colunas opcionais de custo. Os dois exemplos de irrigação são adicionais aos modelos gerais. AON permanece como opção inicial; AOA altera somente a representação. Consulte os guias bilíngues e o relatório atual.
+
+The verification report includes the old-defect regression, exact original-style comparisons, independent LibreOffice highlighting checks, source transcription checks and analysis-state preservation when switching diagrams. It supersedes the earlier release's preview-only formatting assurances.
+
+---
+
+# Project Risk Analysis V2.2 — bilingual distribution extension
+
+English and Brazilian Portuguese support, with eight distribution options: Fixed, Triangular, Beta-PERT, Uniform, Normal, Exponential, Lognormal and Gamma. The existing network, simulation, diagnostics, Risk Portrait, treatments, costs and exports retain their original behavior for existing inputs.
+
+## Run
+
+From this folder, preferably with the verified Python 3.12 environment:
 
 ```bash
 python -m pip install -r requirements-verified.txt
 python -m streamlit run app2_2.py
 ```
 
-- `project_risk_template_v2_2.xlsx`: original English workbook, byte-identical to the upload.
-- `project_risk_template_v2_2_pt_BR.xlsx`: Portuguese workbook, with equivalent inputs, formulas, validations and saved results.
-- `python run_tests.py`: original and bilingual tests.
-- `python verify_preservation.py --iterations 5000 --seed 42`: repeat the numerical comparison with the original archived engine.
-- `verification/VERIFICATION_REPORT.md`: evidence, scope, environment and remaining limits.
-- `baseline/ProjectRisk_V2_2_original.zip`: untouched original package for audit and recovery.
+For Streamlit hosting, the main file is **app2_2.py**. The original Windows/shell launch scripts and VS Code settings remain included. Running the file directly with Python does not start a Streamlit session.
 
-Original canonical CSVs remain at the root of each result ZIP. Additional selected-language CSVs are in `en/` or `pt_BR/`. Portuguese copies use UTF-8 BOM, semicolon delimiters and decimal commas; the numeric values remain unchanged. Project currency is never converted by selecting a language.
+Select **Language / Idioma** in the sidebar. Download or upload either root-level Excel template. Either workbook language works with either interface language. Switching language preserves computed results and treatment controls.
 
-The application translates its own labels and known demonstration-case text. New user-authored free text is preserved as entered. Excel, the operating system, browser dialogs and framework-owned controls may use their own language settings. Recalculate and save edited workbooks in Excel before uploading, exactly as required in V2.2. Desktop Excel has not been exercised in the verification environment.
+## Input distributions
 
-The original V2.2 README follows unchanged.
+Required cells highlight according to the selection:
 
----
+| Distribution | Required fields |
+| --- | --- |
+| Fixed | Fixed value |
+| Triangular, Beta-PERT | Minimum, most likely, maximum |
+| Uniform | Minimum, maximum |
+| Normal | Mean, standard deviation |
+| Exponential | Arithmetic mean > 0 |
+| Lognormal, Gamma | Arithmetic mean > 0, standard deviation > 0 |
 
-# Project Risk Analysis V2.2
+Duration parameters occupy Activities E:J. Optional intrinsic cost parameters occupy O:T, selected in N. Risk-impact parameters occupy Risk_Activity_Map E:J. All previous columns retain their positions. **Leave Cost_Model blank to preserve the linked fixed/time cost workflow**; the supplied templates do so. Original probabilities retain Fixed/Uniform support.
 
-This unified package contains the Streamlit application, populated residential construction workbook, supporting modules, tests and implementation notes.
+Recalculate and save edited workbooks in Excel before uploading. Existing validation still blocks missing or stale formula results. No correlations, event-count mechanisms or case-specific assumptions were added.
 
-## Run
+Read **DISTRIBUTION_GUIDE_EN_PT_BR.md** for parameter meanings, conversions, highlighted cells, scope and cost handling. **LEIA_ME_PT_BR.md** provides Portuguese launch and workflow guidance.
 
-From this folder:
+## Verification and preserved baseline
 
 ```bash
-python -m pip install -r requirements.txt
-python -m streamlit run app2_2.py
+python run_tests.py
+python verify_preservation.py --iterations 5000 --seed 42
+python benchmark_preservation.py
 ```
 
-Upload `project_risk_template_v2_2.xlsx`. Run `python run_tests.py` for automated checks. Windows and shell launch scripts are also supplied.
+The verification report records exact legacy numerical comparisons, new-distribution tests, workbook checks, Streamlit workflows and measured performance. Sampling, expected values, validation, parameter adaptation, dropdowns, formulas and highlighting were extended together. Unextended calculation modules remain unchanged. No new runtime dependency was added.
 
-## Cost inputs
+The original package remains in `baseline/ProjectRisk_V2_2_original.zip`; the previous bilingual package is also retained there. Existing legacy workbooks remain accepted. The two current root-level templates have intentionally been extended; they are no longer byte-identical to their predecessors. Original modeling notes are retained as historical references with notices pointing to the current extension guide.
 
-Select Cost_Association in Activities. Fixed only uses the full original budget as fixed cost and zero time rate. Fixed + time calculates a rate from the original budget, time-dependent share and reference duration. Edit budget/share in Case_Assumptions; reference durations and linked activity costs use live Excel formulas. Recalculate and save in Excel before uploading. The app checks the saved outputs against the current assumptions and blocks inconsistencies.
-
-The app displays an activity-cost summary and exports it as activity_cost_inputs.csv. The simulator also enforces fixed-only behaviour for direct programmatic calls. Separate direct risk costs remain applicable if mapped. Review the contractual allocation before removing them.
-
-## Other features
-
-The package includes network/CPM analysis, four activity duration options with parameter highlighting, shared risk occurrence across mapped activities, risk and activity diagnostics, a broader risk register with response/residual assessment fields, cumulative Risk Portrait with optional all-risks ST curve, independent duration/direct-cost treatment controls, and before/after comparisons. ST reuses the main result. Risk-to-risk propagation remains inactive.
-
-The workbook provides 30 activities, 24 risks, six illustrative fixed-price activities, and proposed treatment assumptions for all 24 risks. New rates, ratings and treatment effectiveness are illustrative classroom inputs, not measured case estimates. All residual acceptance decisions remain Pending. Only risks selected in the app are treated. Treatment implementation costs are excluded.
-
-Original reference activity budgets sum to 1,057,000 monetary units; the original 900,000 cost target is retained for discussion. General project overheads and idle-time charging are outside the activity-rate model. See IMPLEMENTATION_NOTES.md for details.
-
-## Header detection fix
-
-The workbook reader locates each table header by column names within the first 50 rows, rather than assuming Excel row 3. It accepts row-2 headers, the original row-3 layout, and different title/blank-row layouts on individual sheets. Header whitespace is trimmed; missing, duplicate or ambiguous headers produce a worksheet-specific message. Fonts do not affect parsing. This package includes the user's reformatted workbook unchanged.
+Canonical CSVs remain at the root of result ZIPs. Localized copies and a field glossary remain included. New user-authored free text is preserved. Excel, browser/OS dialogs and framework-owned controls may use their own language settings. Desktop Excel and a real browser session have not been exercised in the verification environment; this limitation is recorded in the report.

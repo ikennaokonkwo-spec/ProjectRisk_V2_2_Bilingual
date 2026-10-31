@@ -1,0 +1,27 @@
+{
+  "reference": "Corrected highlighting / irrigation / AOA-AON release, Library version 2",
+  "result": "PASS",
+  "unchanged_files": {
+    "project_risk_template_v2_2.xlsx": "cc1a50b55670259cc1df955aba0ced072eb19fb8a67c9a04446a0239191b03d2",
+    "project_risk_template_v2_2_pt_BR.xlsx": "107074b5e7903c4bfa420c9b36adfc31eee32a67e3d619a41f2c51f6fd1ef3ce",
+    "data_io/model_adapter.py": "abd1d39ab1db410bfd0d8c06e561a0993610e3d1082224c90e513e65d8c0cbc3",
+    "data_io/export_results.py": "1efd72af79ea0b6e94e9df7a718250e8bb938a6f93f1216aab2958ca382020ae",
+    "data_io/input_reader.py": "e7796d749abf96bca3286e6abe29a0710105998f80b078a3a40fdd151611e12f",
+    "data_io/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "examples/irrigation_case_pt_BR.xlsx": "22ce52e57a1d72c20c24ed09c87299e72f8ac19860efd7b919983a1998f08b03",
+    "examples/irrigation_case_en.xlsx": "5922af65dc5c7f94b03c8aa454bbed17d35752dd7d07cb8f2c5f51288c6b3130",
+    "core/simulation.py": "0a5812f811390d0b6f019b09ef819949b21ac4ed290e7fdfd3d184d0784c6c71",
+    "core/distributions.py": "884ca92372f3cbb9a0dc4b9fae4a732ccfc1fa9d72839a44589326d32079ff77",
+    "core/risk_portrait.py": "2f37843804407fea19703a478f04b540037efb3a9714bc6b49ed88dea8f8b27b",
+    "core/network.py": "521123748724cb3dc060343be58f1d52c21772810203877e795a25fb6451440b",
+    "core/reference_analysis.py": "80ba8b98fa6a85d96af8c0d854f20a833f3b73aae8fe989707117e7aa091d9b8",
+    "core/risk_analysis.py": "3c10fa3ef44541bcaa4efe409a1cb651c7cadbb6c4655f2d735b3e7a17499267",
+    "core/validation.py": "a387b4a6e9f351e931672c27e501d3426c43c15154a24714a1fd1d0a04ed65a8",
+    "core/treatment.py": "17160fc264e665a1426f4945a273e6bf0558413ce072263c935bca8b08d8a1e8",
+    "core/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "core/register.py": "b622df0f5da9434c21fba2086c4256a39cd64ed9e7257d633387aa4553311bbf",
+    "core/cost_model.py": "06e4949eb63dced5e344ce44865ee353601ce7e31f5a06a577d773a66a081ffd",
+    "tests/fixtures/all_distributions_en.xlsx": "c635ee200322c732375ba3247954054846f7f3fdab05bf0d78feba9a97fa3213",
+    "tests/fixtures/all_distributions_pt_BR.xlsx": "60661d8567ca8b9792250d5215204ac8d147f8ba6986f6883833cb2c5b0d304a"
+  }
+}

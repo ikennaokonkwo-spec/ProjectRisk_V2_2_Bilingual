@@ -8,8 +8,8 @@ from core.simulation import simulate
 p='project_risk_template_v2_2.xlsx'
 f=openpyxl.load_workbook(p,data_only=False);v=openpyxl.load_workbook(p,data_only=True)
 assert sum(c.data_type=='f' for s in f for row in s for c in row)==210
-assert len(f['Activities'].conditional_formatting)==3
-assert len(f['Activities'].data_validations.dataValidation)==3
+assert len(f['Activities'].conditional_formatting)==12
+assert len(f['Activities'].data_validations.dataValidation)==4
 assert f['Activities'].freeze_panes is not None
 d=read_v1_workbook(p)
 assert not [x for x in validate_all(d) if x.severity=='Error']

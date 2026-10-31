@@ -1,6 +1,5 @@
 from __future__ import annotations
-import tempfile
-import hashlib
+from io import BytesIO
 from core.register import register_view, treatment_specs
 from core.cost_model import cost_input_summary
 from pathlib import Path
@@ -20,6 +19,8 @@ from core.risk_analysis import project_statistics, risk_importance, activity_dia
 from core.risk_portrait import build_risk_portrait, empirical_cdf
 from core.treatment import apply_treatments
 from core.reference_analysis import reference_cpm, network_figure, network_svg_html
+from presentation.aoa import aoa_svg_html, network_label
+from presentation.session import keep, workbook, upload_changed, submit, collect, pending, progress, acknowledge, tabs, expander
 st.set_page_config(page_title=translate_in_language('Project Risk Analysis V2.2', st.session_state.get('ui_language', 'en')), page_icon='📊', layout='wide')
 locale = st.sidebar.selectbox('Language / Idioma', ['en', 'pt_BR'], format_func=lambda value: {'en': 'English', 'pt_BR': 'Português (Brasil)'}[value], key='ui_language')
 set_language(locale)
@@ -29,15 +30,26 @@ st.markdown(t('**Project → Network/CPM → Risk Register → Mapping → Valid
 TEMPLATE = Path(__file__).parent / ('project_risk_template_v2_2_pt_BR.xlsx' if language() == 'pt_BR' else 'project_risk_template_v2_2.xlsx')
 with open(TEMPLATE, 'rb') as f:
     st.download_button(t('Download V2.2 input template'), f.read(), TEMPLATE.name, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', key='widget_35_4')
-uploaded = st.file_uploader(t('Upload completed V2.2 workbook'), type=['xlsx'], key='widget_38_9')
-if uploaded is None:
+IRRIGATION = Path(__file__).parent/'examples'/('irrigation_case_pt_BR.xlsx' if locale=='pt_BR' else 'irrigation_case_en.xlsx')
+if IRRIGATION.is_file():
+    st.download_button(t('Download irrigation case input'),IRRIGATION.read_bytes(),IRRIGATION.name,'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',key='download_irrigation_case')
+with expander(t('Distribution input guide'), expanded=False, key='layout_guide'):
+    guide = [('Fixed', 'Fixed value'), ('Triangular', 'Minimum, most likely, maximum'),
+             ('Beta-PERT', 'Minimum, most likely, maximum'), ('Uniform', 'Minimum, maximum'),
+             ('Normal', 'Mean and standard deviation'), ('Exponential', 'Mean only; greater than zero'),
+             ('Lognormal', 'Arithmetic mean and standard deviation; both greater than zero'),
+             ('Gamma', 'Arithmetic mean and standard deviation; both greater than zero')]
+    st.dataframe(pd.DataFrame([[t(a), t(b)] for a,b in guide], columns=[t('Distribution'), t('Required inputs')]), use_container_width=True)
+    st.caption(t('Highlighted worksheet cells are required for the chosen distribution. Unused parameters are ignored and are not erased. These options apply to duration, intrinsic cost and mapped impacts; occurrence probability models are unchanged.'))
+uploaded = st.file_uploader(t('Upload completed V2.2 workbook'), type=['xlsx'], key='widget_38_9', on_change=upload_changed)
+source = workbook(uploaded)
+if source is None:
     st.info(t('Complete the template and upload it to begin.'))
     st.stop()
-with tempfile.NamedTemporaryFile(delete=False, suffix='.xlsx') as tmp:
-    tmp.write(uploaded.getvalue())
-    path = tmp.name
 try:
-    data = read_v1_workbook(path)
+    if 'data' not in source:
+        source['data'] = read_v1_workbook(BytesIO(source['content']))
+    data = source['data']
 except Exception as e:
     st.error(t(f'Workbook could not be read: {e}'))
     st.stop()
@@ -54,6 +66,8 @@ if warnings:
     st.warning(t(f'{len(warnings)} non-blocking warning(s).'))
     st.dataframe(table_view(pd.DataFrame([vars(x) for x in warnings])), use_container_width=True)
 settings = project_settings(data['Project'])
+if settings.get('Input_Notes'):
+    st.info(t(str(settings['Input_Notes'])))
 activities, risks, mappings = to_model_objects(data)
 cost_inputs = cost_input_summary(activities)
 st.subheader(t('Activity cost associations'))
@@ -71,15 +85,15 @@ def opt_float(v):
         return None
 target_duration = opt_float(settings.get('Target_Duration'))
 target_cost = opt_float(settings.get('Target_Cost'))
-with st.expander(t('Input data'), expanded=False):
-    tabs = st.tabs([t('Activities'), t('Risk Register'), t('Risk–Activity Mapping'), t('Risk Relationships')])
-    with tabs[0]:
+with expander(t('Input data'), expanded=False, key='layout_input'):
+    input_tabs = tabs([t('Activities'), t('Risk Register'), t('Risk–Activity Mapping'), t('Risk Relationships')], key='layout_input_tabs')
+    with input_tabs[0]:
         st.dataframe(table_view(data['Activities']), use_container_width=True)
-    with tabs[1]:
+    with input_tabs[1]:
         st.dataframe(table_view(data['Risk_Register']), use_container_width=True)
-    with tabs[2]:
+    with input_tabs[2]:
         st.dataframe(table_view(data['Risk_Activity_Map']), use_container_width=True)
-    with tabs[3]:
+    with input_tabs[3]:
         if 'Risk_Relationships' in data:
             st.dataframe(table_view(data['Risk_Relationships']), use_container_width=True)
             st.caption(t('Reserved for the later causal-risk layer; V2.2 does not propagate these relationships.'))
@@ -93,26 +107,38 @@ c2.metric(t('Critical activities'), len(ref_cpm['critical_activities']))
 paths = ref_cpm.get('critical_paths', [])
 st.write(t('**Critical path(s):** ' + ('; '.join((' → '.join(p) for p in paths)) if paths else 'None identified')))
 st.caption(t('Reference durations are distribution expected values; this is the pre-simulation CPM view.'))
-st.markdown(t('**Network legend:** red link = critical-path precedence · light red-bordered node = critical activity · grey link = non-critical precedence'))
-network_html = network_svg_html(activities, ref_table)
+diagram_type = keep(st.selectbox)(t('Network diagram'), ['AON','AOA'], format_func=partial(network_label,lang=locale), key='network_diagram_type')
+if diagram_type == 'AOA':
+    st.markdown(t('**AOA legend:** circles = events; solid arrows = activities; dashed arrows = zero-duration dummy links; red = critical. tE/tL are earliest/latest event times.'))
+    st.caption(t('AOA is a display conversion of the same precedence network. Dummy links preserve joins; they add no duration, cost or simulated activity.'))
+    network_html = aoa_svg_html(activities,lang=locale)
+else:
+    st.markdown(t('**Network legend:** red link = critical-path precedence · light red-bordered node = critical activity · grey link = non-critical precedence'))
+    network_html = network_svg_html(activities, ref_table)
 components.html(network_view(network_html), height=720, scrolling=True)
 st.caption(t('The network is a scrollable vector diagram so node text remains legible even for large projects.'))
 st.dataframe(table_view(ref_table.style.format({'Reference_Duration': '{:.2f}', 'ES': '{:.2f}', 'EF': '{:.2f}', 'LS': '{:.2f}', 'LF': '{:.2f}', 'Slack': '{:.2f}'})), use_container_width=True)
 st.caption(t('Critical path here is the reference CPM result. Probabilistic criticality below measures how often each activity is critical across simulations.'))
 st.header(t('3. Monte Carlo Simulation'))
 c1, c2 = st.columns(2)
-iterations = c1.number_input(t('Iterations'), min_value=100, max_value=100000, value=int(settings.get('Simulation_Iterations', 5000)), step=100, key='widget_99_11')
-seed = c2.number_input(t('Random seed'), min_value=0, value=int(settings.get('Random_Seed', 42)), step=1, key='widget_100_5')
-signature = (hashlib.sha256(uploaded.getvalue()).hexdigest(), int(iterations), int(seed))
-if st.button(t('Run simulation'), type='primary', key='widget_102_3'):
-    with st.spinner(t('Simulating complete project realizations...')):
-        st.session_state['sig'] = signature
-        st.session_state['result'] = simulate(activities, risks, mappings, int(iterations), int(seed))
-        for k in ['portrait', 'treatment', 'treatment_specs']:
-            st.session_state.pop(k, None)
-        for key in list(st.session_state):
-            if key.startswith(('p_', 'dm_', 'cm_')):
-                st.session_state.pop(key, None)
+iterations = keep(c1.number_input)(t('Iterations'), min_value=100, max_value=100000, value=int(settings.get('Simulation_Iterations', 5000)), step=100, key='widget_99_11')
+seed = keep(c2.number_input)(t('Random seed'), min_value=0, value=int(settings.get('Random_Seed', 42)), step=1, key='widget_100_5')
+signature = (source['digest'], int(iterations), int(seed))
+completed = collect('simulation', signature)
+if completed is not None:
+    st.session_state['sig'] = signature
+    st.session_state['result'] = completed
+    for k in ['portrait', 'treatment', 'treatment_specs']:
+        st.session_state.pop(k, None)
+    for job_slot in ['portrait', 'treatment']:
+        job = st.session_state.get('_jobs', {}).pop(job_slot, None)
+        if job: job['future'].cancel()
+    acknowledge('simulation')
+if st.button(t('Run simulation'), type='primary', key='widget_102_3', disabled=pending('simulation')):
+    submit('simulation', signature, simulate, activities, risks, mappings, int(iterations), int(seed))
+if pending('simulation'):
+    progress()
+    st.stop()
 if st.session_state.get('sig') != signature or 'result' not in st.session_state:
     st.stop()
 result = st.session_state['result']
@@ -132,7 +158,7 @@ if target_duration is not None or target_cost is not None:
         c1.metric(t('P(Duration ≤ target)'), number(stats['P_Meet_Duration_Target'], '.1%'))
     if target_cost is not None:
         c2.metric(t('P(Cost ≤ target)'), number(stats['P_Meet_Cost_Target'], '.1%'))
-t1, t2 = st.tabs([t('Cumulative probability'), t('Frequency')])
+t1, t2 = tabs([t('Cumulative probability'), t('Frequency')], key='layout_result_tabs')
 with t1:
     fig, axs = plt.subplots(1, 2, figsize=(12, 4.5))
     for ax, field, title in [(axs[0], 'Duration', 'Project Duration CDF'), (axs[1], 'Cost', 'Project Cost CDF')]:
@@ -184,7 +210,7 @@ ax.grid(axis='x', alpha=0.3)
 st.pyplot(figure_view(fig))
 plt.close(fig)
 st.dataframe(table_view(merged), use_container_width=True)
-selected_activity = st.selectbox(t('Inspect one activity'), merged['Activity_ID'].tolist(), key='widget_164_18')
+selected_activity = keep(st.selectbox)(t('Inspect one activity'), merged['Activity_ID'].tolist(), key='widget_164_18')
 ag = result['activities'].query('Activity_ID == @selected_activity')
 fig, axs = plt.subplots(1, 3, figsize=(12, 3.8))
 for ax, field in zip(axs, ['Final_Duration', 'ES', 'EF']):
@@ -208,15 +234,18 @@ st.caption(t('Restored from the baseline analytical concept: frequency shows how
 st.dataframe(table_view(pathfreq), use_container_width=True)
 st.header(t('7. Risk Portrait'))
 st.caption(t('The table retains the complete cumulative risk sequence. The chart intentionally focuses on the four highest-ranked risks so curve separation remains readable.'))
-if st.button(t('Build complete Risk Portrait'), key='widget_188_3'):
-    with st.spinner(t('Building cumulative scenarios using common random numbers...')):
-        st.session_state['portrait'] = build_risk_portrait(activities, risks, mappings, ranking, int(iterations), int(seed), target_duration, target_cost, baseline_result=result)
+completed = collect('portrait', signature)
+if completed is not None:
+    st.session_state['portrait'] = completed
+    acknowledge('portrait')
+if st.button(t('Build complete Risk Portrait'), key='widget_188_3', disabled=pending('portrait')):
+    submit('portrait', signature, build_risk_portrait, activities, risks, mappings, ranking, int(iterations), int(seed), target_duration, target_cost, baseline_result=result)
 if 'portrait' in st.session_state:
     portrait, scenarios = st.session_state['portrait']
     cols = ['Scenario', 'Active_Risks', 'Mean_Duration', 'P50_Duration', 'P90_Duration', 'Delta_Mean_Duration', 'Delta_P50_Duration', 'Delta_P90_Duration', 'Mean_Cost', 'P90_Cost']
     st.dataframe(table_view(portrait[cols]), use_container_width=True)
     focus = ['S0'] + [f'S{i}' for i in range(1, 5) if f'S{i}' in scenarios]
-    show_total = st.checkbox(t('Show all-active-risks curve (ST)'), value=True, key='widget_197_15')
+    show_total = keep(st.checkbox)(t('Show all-active-risks curve (ST)'), value=True, key='widget_197_15')
     if show_total and 'ST' in scenarios and ('ST' not in focus):
         focus.append('ST')
     fig, ax = plt.subplots(figsize=(10, 5.5))
@@ -232,13 +261,13 @@ if 'portrait' in st.session_state:
     st.pyplot(figure_view(fig))
     plt.close(fig)
 st.header(t('8. Risk Treatment'))
-mode = st.radio(t('Treatment mode'), ['Single Risk', 'Multiple Risks'], horizontal=True, key='widget_211_5', format_func=partial(translate_in_language, lang=locale))
+mode = keep(st.radio)(t('Treatment mode'), ['Single Risk', 'Multiple Risks'], horizontal=True, key='widget_211_5', format_func=partial(translate_in_language, lang=locale))
 active_ids = {r['id'] for r in risks if r.get('active', True)}
 ranked_ids = [rid for rid in ranking['Risk_ID'] if rid in active_ids]
 file_specs = {x['risk_id']: x for x in treatment_specs(data)}
 if not ranked_ids:
     st.info(t('No active risks to treat. Activate and map a registered risk to compare treatments.'))
-selected = ([st.selectbox(t('Risk to treat'), ranked_ids, key='widget_217_11')] if mode == 'Single Risk' else st.multiselect(t('Risks to treat'), ranked_ids, default=ranked_ids[:min(2, len(ranked_ids))], key='widget_217_81')) if ranked_ids else []
+selected = ([keep(st.selectbox)(t('Risk to treat'), ranked_ids, key='widget_217_11')] if mode == 'Single Risk' else keep(st.multiselect)(t('Risks to treat'), ranked_ids, default=ranked_ids[:min(2, len(ranked_ids))], key='widget_217_81')) if ranked_ids else []
 specs = []
 for rid in selected:
     r = next((x for x in risks if x['id'] == rid))
@@ -246,26 +275,36 @@ for rid in selected:
     default_p = saved.get('new_probability')
     if default_p is None:
         default_p = float(r.get('probability', 0))
-    with st.expander(t(f'Treatment assumptions — {rid}'), expanded=True):
+    with expander(t(f'Treatment assumptions — {rid}'), expanded=True, key=f'layout_treatment_{rid}'):
         c1, c2, c3 = st.columns(3)
-        p = c1.slider(t(f'Treated probability — {rid}'), 0.0, 1.0, default_p, 0.01, key=f'p_{rid}')
-        dm = c2.number_input(t(f'Duration impact multiplier — {rid}'), min_value=0.0, value=float(saved.get('duration_multiplier', 1)), step=0.05, key=f'dm_{rid}')
-        cm = c3.number_input(t(f'Direct cost impact multiplier — {rid}'), min_value=0.0, value=float(saved.get('cost_multiplier', 1)), step=0.05, key=f'cm_{rid}')
+        p = keep(c1.slider)(t(f'Treated probability — {rid}'), min_value=0.0, max_value=1.0, value=default_p, step=0.01, key=f'p_{rid}')
+        dm = keep(c2.number_input)(t(f'Duration impact multiplier — {rid}'), min_value=0.0, value=float(saved.get('duration_multiplier', 1)), step=0.05, key=f'dm_{rid}')
+        cm = keep(c3.number_input)(t(f'Direct cost impact multiplier — {rid}'), min_value=0.0, value=float(saved.get('cost_multiplier', 1)), step=0.05, key=f'cm_{rid}')
         specs.append({'risk_id': rid, 'new_probability': p, 'duration_multiplier': dm, 'cost_multiplier': cm})
         record = management.loc[management['Risk_ID'] == rid]
         if not record.empty:
             st.dataframe(table_view(record[[c for c in ['Risk_ID', 'Response_Strategy', 'Response_Action', 'Response_Owner', 'Response_Due_Date', 'Residual_Acceptance'] if c in record]]), use_container_width=True)
 if 'treatment' in st.session_state and st.session_state.get('treatment_specs') != specs:
     st.session_state.pop('treatment', None)
-if selected and st.button(t('Run treatment comparison'), key='widget_235_16'):
+def compare_treatment(activities, risks, mappings, specs, iterations, seed, target_duration, target_cost, baseline_result):
+    result = baseline_result
     tr, tm = apply_treatments(risks, mappings, specs)
     after = simulate(activities, tr, tm, int(iterations), int(seed))
     bs = project_statistics(result['project'], target_duration, target_cost)
     ats = project_statistics(after['project'], target_duration, target_cost)
     comp = pd.DataFrame([['Mean Duration', bs['Mean_Duration'], ats['Mean_Duration']], ['P50 Duration', bs['P50_Duration'], ats['P50_Duration']], ['P90 Duration', bs['P90_Duration'], ats['P90_Duration']], ['Mean Cost', bs['Mean_Cost'], ats['Mean_Cost']], ['P90 Cost', bs['P90_Cost'], ats['P90_Cost']]], columns=['Metric', 'Before', 'After'])
     comp['Change'] = comp['After'] - comp['Before']
-    st.session_state['treatment'] = (after, comp, pd.DataFrame(specs))
+    return after, comp, pd.DataFrame(specs)
+comparison_signature = (signature, specs)
+completed = collect('treatment', comparison_signature)
+if completed is not None:
+    st.session_state['treatment'] = completed
     st.session_state['treatment_specs'] = specs
+    acknowledge('treatment')
+if selected and st.button(t('Run treatment comparison'), key='widget_235_16', disabled=pending('treatment')):
+    submit('treatment', comparison_signature, compare_treatment, activities, risks, mappings, specs, int(iterations), int(seed), target_duration, target_cost, baseline_result=result)
+if pending('portrait') or pending('treatment'):
+    progress()
 if 'treatment' in st.session_state:
     after, comp, specdf = st.session_state['treatment']
     st.subheader(t('Treatment assumptions'))

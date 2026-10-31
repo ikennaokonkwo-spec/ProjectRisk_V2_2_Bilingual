@@ -1,3 +1,5 @@
+Atualização: esta edição acrescenta Exponencial, Lognormal e Gama, disponibiliza Uniforme e expõe parâmetros opcionais de custo. Consulte DISTRIBUTION_GUIDE_EN_PT_BR.md e verification/VERIFICATION_REPORT.md. A descrição de preservação byte a byte da edição anterior é histórica; os arquivos estendidos são identificados no relatório atual.
+
 # Notas de implementação — V2.2 bilíngue
 
 ## Arquitetura e preservação

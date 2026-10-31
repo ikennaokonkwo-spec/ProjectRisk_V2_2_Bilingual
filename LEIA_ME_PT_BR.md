@@ -1,10 +1,16 @@
+# Troca de idioma com preservação do estado
+
+Esta edição mantém o estado da sessão antes, durante e depois dos cálculos. Trocas repetidas de idioma preservam dados, configurações, resultados e edições de tratamento temporariamente ocultas. Consulte [SESSION_STATE_EN_PT_BR.md](SESSION_STATE_EN_PT_BR.md). Os arquivos Excel e os módulos `core/` e `data_io/` não foram alterados nesta edição.
+
+Atualização: esta edição acrescenta Exponencial, Lognormal e Gama, disponibiliza Uniforme e expõe parâmetros opcionais de custo. Consulte DISTRIBUTION_GUIDE_EN_PT_BR.md e verification/VERIFICATION_REPORT.md. A descrição de preservação byte a byte da edição anterior é histórica; os arquivos estendidos são identificados no relatório atual.
+
 # Análise de Riscos de Projetos V2.2 — inglês e português
 
 O aplicativo mantém o mecanismo computacional da versão recebida. A adaptação acrescenta interface, apresentação, mensagens, modelo de entrada e saídas em inglês e português do Brasil. A escolha de idioma não converte moedas, unidades, probabilidades nem parâmetros.
 
 ## Instalação e execução
 
-Use Python 3.12 para reproduzir o ambiente verificado. Extraia o ZIP, abra a pasta `ProjectRisk_Bilingual` no VS Code e abra **Terminal → Novo Terminal**. Execute:
+Use Python 3.12 para reproduzir o ambiente verificado. Extraia o ZIP, abra a pasta `ProjectRisk_State_Persistent` no VS Code e abra **Terminal → Novo Terminal**. Execute:
 
 ```bash
 python -m venv .venv

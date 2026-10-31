@@ -1,0 +1,15 @@
+test_bilingual_workbook_lists_and_highlighting (__main__.DistributionTests.test_bilingual_workbook_lists_and_highlighting) ... ok
+test_full_model_bilingual_portrait_treatment_and_export (__main__.DistributionTests.test_full_model_bilingual_portrait_treatment_and_export) ... ok
+test_invalid_moments_rejected_in_all_input_locations (__main__.DistributionTests.test_invalid_moments_rejected_in_all_input_locations) ... ok
+test_monte_carlo_moments_and_positive_support (__main__.DistributionTests.test_monte_carlo_moments_and_positive_support) ... ok
+test_new_seeded_draws_match_numpy (__main__.DistributionTests.test_new_seeded_draws_match_numpy) ... ok
+test_old_sampler_and_expected_values_are_exact (__main__.DistributionTests.test_old_sampler_and_expected_values_are_exact) ... ok
+test_parameter_conversions_and_means (__main__.DistributionTests.test_parameter_conversions_and_means) ... ok
+test_probability_models_are_unchanged (__main__.DistributionTests.test_probability_models_are_unchanged) ... ok
+test_reference_formulas_recalculate_all_eight_models (__main__.DistributionTests.test_reference_formulas_recalculate_all_eight_models) ... ok
+test_unused_parameters_are_not_repurposed (__main__.DistributionTests.test_unused_parameters_are_not_repurposed) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 11.255s
+
+OK

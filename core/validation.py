@@ -6,7 +6,7 @@ import math
 import pandas as pd
 import networkx as nx
 
-DISTRIBUTIONS = {"Fixed", "Beta-PERT", "Triangular", "Uniform", "Normal"}
+DISTRIBUTIONS = {"Fixed", "Beta-PERT", "Triangular", "Uniform", "Normal", "Exponential", "Lognormal", "Gamma"}
 RISK_TYPES = {"Threat", "Opportunity"}
 SCOPES = {"Local", "Global"}
 IMPACT_TYPES = {"Duration", "Cost", "Both"}
@@ -103,6 +103,9 @@ def validate_activities(df: pd.DataFrame) -> list[ValidationIssue]:
                     raise ValueError
                 if float(vals["Duration_Mean"]) < 0 or float(vals["Duration_SD"]) <= 0:
                     raise ValueError
+            elif model in {"Exponential", "Lognormal", "Gamma"}:
+                from .distributions import positive_moments
+                positive_moments(model, {"mean": vals["Duration_Mean"], "sd": vals["Duration_SD"]})
         except Exception:
             issues.append(ValidationIssue("Error", "Duration", f"{aid}: invalid parameters for {model}."))
         if not _blank(row.get("Base_Cost")):
@@ -175,6 +178,9 @@ def validate_mapping(mapping: pd.DataFrame, activities: pd.DataFrame, risks: pd.
                 if _blank(mn) or _blank(mx) or not (0 <= float(mn) <= float(mx)): raise ValueError
             elif dist == "Normal":
                 if _blank(mean) or _blank(sd) or float(mean) < 0 or float(sd) <= 0: raise ValueError
+            elif dist in {"Exponential", "Lognormal", "Gamma"}:
+                from .distributions import positive_moments
+                positive_moments(dist, {"mean": mean, "sd": sd})
         except Exception:
             issues.append(ValidationIssue("Error", "Mapping", f"{rid}/{aid}: invalid parameters for {dist}."))
 
@@ -226,6 +232,9 @@ def _validate_v2_extensions(data):
                 if not (0<=a<=b): raise ValueError
             elif cm=="Normal":
                 if float(row.get("Cost_Mean"))<0 or float(row.get("Cost_SD"))<=0: raise ValueError
+            elif cm in {"Exponential", "Lognormal", "Gamma"}:
+                from .distributions import positive_moments
+                positive_moments(cm, {"mean":row.get("Cost_Mean"), "sd":row.get("Cost_SD")})
         except Exception:
             issues.append(ValidationIssue("Error","Cost",f"{aid}: invalid parameters for Cost_Model {cm}."))
     for _,row in risks.iterrows():

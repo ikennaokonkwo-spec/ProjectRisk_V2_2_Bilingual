@@ -21,5 +21,5 @@ for risk,spec in zip(r,treatment_specs(d)):
     if risk['type']=='Opportunity':assert spec['new_probability']>=risk['probability']
     else:assert spec['new_probability']<=risk['probability']
 assert d['Activities'].iloc[0]['Duration_Model']=='Fixed'
-assert len(w['Activities'].conditional_formatting)==3
+assert len(w['Activities'].conditional_formatting)==12
 print('test_populated_case: PASS')

@@ -1,0 +1,22 @@
+{
+  "iterations": 400,
+  "seed": 42,
+  "repeats_per_legacy_variant": 3,
+  "timings_seconds": {
+    "original": [
+      1.0651884140006587,
+      1.2417584369995893,
+      1.251747962999616
+    ],
+    "extended_legacy_inputs": [
+      1.0925466039998355,
+      1.5640663139993194,
+      1.2340238280003177
+    ]
+  },
+  "median_original_seconds": 1.2417584369995893,
+  "median_extended_legacy_seconds": 1.2340238280003177,
+  "legacy_runtime_change_percent": -0.6228754940421743,
+  "all_eight_distributions_profile_seconds": 1.2973130330001368,
+  "scope": "simulation only; excludes workbook import, validation, UI and export; no universal speed guarantee; host timings vary"
+}
